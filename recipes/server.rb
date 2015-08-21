@@ -58,14 +58,16 @@ end
 
 if platform_family?('debian')
   args_file = '/etc/default/graylog-server'
+  args_template = 'graylog.server.default.erb'
 elsif platform_family?('rhel')
   args_file = '/etc/sysconfig/graylog-server'
+  args_template = 'graylog.server.sysconfig.erb'
 else
   Chef::Log.error 'Platform not supported.'
 end
 
 template args_file do
-  source 'graylog.server.default.erb'
+  source args_template
   owner 'root'
   mode 0644
   notifies :restart, 'service[graylog-server]', node.graylog2[:restart].to_sym

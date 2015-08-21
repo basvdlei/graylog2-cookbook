@@ -43,14 +43,16 @@ end
 
 if platform_family?('debian')
   args_file = '/etc/default/graylog-radio'
+  args_template = 'graylog.radio.default.erb'
 elsif platform_family?('rhel')
   args_file = '/etc/sysconfig/graylog-radio'
+  args_template = 'graylog.radio.sysconfig.erb'
 else
   Chef::Log.error 'Platform not supported.'
 end
 
 template args_file do
-  source 'graylog.radio.default.erb'
+  source args_template
   owner 'root'
   mode 0644
   notifies :restart, 'service[graylog-radio]', node.graylog2[:restart].to_sym
